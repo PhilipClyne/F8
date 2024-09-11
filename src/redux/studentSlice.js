@@ -10,7 +10,7 @@ export const getAlll = createAsyncThunk(
     const url = BASE_URL + `students?page=${currentPage}&size=${limit}`;
     try {
       const response = await axios.get(url);
-      return response.data; // Assuming response.data contains the paginated result
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -40,6 +40,20 @@ export const updateStudent = createAsyncThunk(
     }
   }
 );
+export const addStudent = createAsyncThunk(
+  "student/addStudent",
+  async (student, thunkAPI) => {
+    const url = `${BASE_URL}students`;
+    try {
+      const response = await axios.post(url, student);
+      return response.data; // Giả định backend trả về dữ liệu sinh viên đã tạo
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to add student"
+      );
+    }
+  }
+);
 const studentSlice = createSlice({
   name: "student",
   initialState: {
@@ -57,13 +71,44 @@ const studentSlice = createSlice({
       })
       .addCase(getAlll.fulfilled, (state, action) => {
         state.loading = false;
-        state.students = action.payload.content; // Assuming your students are in 'content'
+        state.students = action.payload.content;
         state.totalPages = action.payload.totalPages;
         state.currentPage = action.payload.pageable.pageNumber;
       })
       .addCase(getAlll.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || "Something went wrong";
+      })
+      .addCase(deleteStudentById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteStudentById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.students = state.students.filter(
+          (student) => student.id !== action.payload.id
+        );
+      })
+      .addCase(deleteStudentById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Something went wrong deleting student";
+      })
+      .addCase(addStudent.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.students.push(action.payload); // Assuming your backend returns the created student
+      })
+      .addCase(addStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Something went wrong adding student";
+      })
+      .addCase(updateStudent.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.error = action.payload || "Something went wrong adding student";
       });
   },
 });
