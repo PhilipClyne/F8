@@ -4,6 +4,19 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/api/";
 
+export const getAllStudents = createAsyncThunk(
+  "student/getAllStudents",
+  async (_, thunkAPI) => {
+    const url = BASE_URL + "students";
+    try {
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getAlll = createAsyncThunk(
   "student/getAll",
   async ({ currentPage, limit }, thunkAPI) => {
@@ -109,6 +122,18 @@ const studentSlice = createSlice({
       .addCase(updateStudent.fulfilled, (state, action) => {
         state.loading = false;
         // state.error = action.payload || "Something went wrong adding student";
+      });
+    builder
+      .addCase(getAllStudents.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllStudents.fulfilled, (state, action) => {
+        state.loading = false;
+        state.students = action.payload;
+      })
+      .addCase(getAllStudents.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || "Something went wrong";
       });
   },
 });

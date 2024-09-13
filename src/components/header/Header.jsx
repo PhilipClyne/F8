@@ -16,20 +16,34 @@ function Header() {
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <div>
-      <Navbar expand="sm">
-        <NavbarBrand href="/">TN</NavbarBrand>
-        <NavbarToggler onClick={toggle} />
+    <div className="bg-white shadow-md">
+      <Navbar expand="sm" className="container mx-auto px-4">
+        <NavbarBrand href="/" className="text-orange-600 font-bold text-xl">
+          TN
+        </NavbarBrand>
+        <NavbarToggler onClick={toggle} className="border-none text-orange-600">
+          <span className="navbar-toggler-icon" />
+        </NavbarToggler>
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="me-auto" navbar>
+          <Nav className="me-auto flex-grow flex items-center" navbar>
             <NavItem>
-              <NavLink href="/">Home</NavLink>
+              <NavLink
+                href="/"
+                className="text-orange-600 hover:text-orange-800"
+              >
+                Home
+              </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/student">Student</NavLink>
+              <NavLink
+                href="/student"
+                className="text-orange-600 hover:text-orange-800"
+              >
+                Student
+              </NavLink>
             </NavItem>
           </Nav>
-          <NavbarText>My website</NavbarText>
+          <NavbarText className="text-orange-600">My website</NavbarText>
         </Collapse>
       </Navbar>
     </div>
