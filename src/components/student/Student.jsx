@@ -22,6 +22,7 @@ const StudentPage = () => {
     city: "",
     dateOfBirth: "",
     classification: "",
+    image: "",
   });
   const handleNewStudentInputChange = (e) => {
     setNewStudentData({ ...newStudentData, [e.target.name]: e.target.value });
@@ -38,6 +39,7 @@ const StudentPage = () => {
           city: "",
           dateOfBirth: "",
           classification: "",
+          image: "",
         });
         // Fetch updated student data (optional)
         dispatch(getAlll({ currentPage: 0, limit: 10 }));
@@ -53,6 +55,7 @@ const StudentPage = () => {
     city: "",
     dateOfBirth: "",
     classification: "",
+    image: "",
   });
 
   useEffect(() => {
@@ -78,6 +81,7 @@ const StudentPage = () => {
     setEditingId(null);
     setStudentFormData({
       id: "",
+      image: "",
       name: "",
       city: "",
       dateOfBirth: "",
@@ -246,6 +250,7 @@ const StudentPage = () => {
             <thead className="bg-orange-500 text-white">
               <tr>
                 <th className="py-3 px-6 text-left">Id</th>
+                <th className="py-3 px-6 text-left">Image</th>
                 <th className="py-3 px-6 text-left">Name</th>
                 <th className="py-3 px-6 text-left">City</th>
                 <th className="py-3 px-6 text-left">Date of Birth</th>
@@ -257,6 +262,19 @@ const StudentPage = () => {
               {filteredStudents.map((student, index) => (
                 <tr key={student.id} className="border-b hover:bg-orange-50">
                   <td className="py-4 px-6">{index + 1}</td>
+                  <td className="py-4 px-6">
+                    {editingId === student.id ? (
+                      <input
+                        type="text"
+                        name="image"
+                        value={studentFormData.image}
+                        onChange={handleInputChange}
+                        className="border rounded-lg p-1"
+                      />
+                    ) : (
+                      <img src={student.image} alt="" className="w-32 " />
+                    )}
+                  </td>
                   <td className="py-4 px-6">
                     {editingId === student.id ? (
                       <input
